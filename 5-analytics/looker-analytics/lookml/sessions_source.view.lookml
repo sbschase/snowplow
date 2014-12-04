@@ -1,4 +1,4 @@
-# Copyright (c) 2013-2014 Snowplow Analytics Ltd. All rights reserved.
+# Copyright (c) 2013-2015 Snowplow Analytics Ltd. All rights reserved.
 #
 # This program is licensed to you under the Apache License Version 2.0,
 # and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -12,7 +12,7 @@
 # Version: 2-0-0
 #
 # Author(s): Yali Sassoon
-# Copyright: Copyright (c) 2013-2014 Snowplow Analytics Ltd
+# Copyright: Copyright (c) 2013-2015 Snowplow Analytics Ltd
 # License: Apache License Version 2.0
 
 - view: sessions_source
@@ -42,9 +42,12 @@
           AND (
             NOT(refr_medium IS NULL OR refr_medium = '') OR
             NOT ((mkt_campaign IS NULL AND mkt_content IS NULL AND mkt_medium IS NULL AND mkt_source IS NULL AND mkt_term IS NULL)
-                    OR (mkt_campaign = '' AND mkt_content = '' AND mkt_medium = '' AND mkt_source = '' AND mkt_term = '')
+                    OR (mkt_campaign = '' AND mkt_content = '' AND mkt_medium = '' AND mkt_source = '' AND mkt_term = '') 
             )
           ) -- Either the refr or mkt fields are set (not blank)
+          AND
+          -- if prod -- collector_tstamp > '2014-01-01'
+          -- if dev  -- collector_tstamp > DATEADD (day, -2, GETDATE()) 
         GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12) AS t
       WHERE "rank" = 1 -- Only pull the first referer for each visit
     

@@ -1,4 +1,4 @@
-# Copyright (c) 2013-2014 Snowplow Analytics Ltd. All rights reserved.
+# Copyright (c) 2013-2015 Snowplow Analytics Ltd. All rights reserved.
 #
 # This program is licensed to you under the Apache License Version 2.0,
 # and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -12,7 +12,7 @@
 # Version: 2-0-1
 #
 # Author(s): Yali Sassoon
-# Copyright: Copyright (c) 2013-2014 Snowplow Analytics Ltd
+# Copyright: Copyright (c) 2013-2015 Snowplow Analytics Ltd
 # License: Apache License Version 2.0
 
 - view: visitors_basic
@@ -28,6 +28,9 @@
       FROM atomic.events
       WHERE domain_userid IS NOT NULL
         AND domain_userid <> ''
+        AND 
+        -- if prod -- collector_tstamp > '2014-01-01'
+        -- if dev  -- collector_tstamp > DATEADD (day, -2, GETDATE()) 
       GROUP BY 1
       
     sql_trigger_value: SELECT COUNT(*) FROM ${sessions.SQL_TABLE_NAME}

@@ -1,4 +1,4 @@
-# Copyright (c) 2013-2014 Snowplow Analytics Ltd. All rights reserved.
+# Copyright (c) 2013-2015 Snowplow Analytics Ltd. All rights reserved.
 #
 # This program is licensed to you under the Apache License Version 2.0,
 # and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -12,7 +12,7 @@
 # Version: 2-0-0
 #
 # Author(s): Yali Sassoon
-# Copyright: Copyright (c) 2013-2014 Snowplow Analytics Ltd
+# Copyright: Copyright (c) 2013-2015 Snowplow Analytics Ltd
 # License: Apache License Version 2.0
 
 - view: sessions_technology
@@ -78,8 +78,11 @@
             br_features_gears, br_features_java, br_features_pdf, br_features_quicktime, br_features_realplayer, br_features_silverlight,
             br_features_windowsmedia, br_cookies, os_name, os_family, os_manufacturer, os_timezone, dvce_type, dvce_ismobile, dvce_screenwidth,
             dvce_screenheight) AS "rank"
-        FROM "atomic"."events"
-        WHERE domain_userid IS NOT NULL ) AS a
+        FROM atomic.events
+        WHERE domain_userid IS NOT NULL 
+        -- if prod -- AND collector_tstamp > '2014-01-01'
+        -- if dev  -- AND collector_tstamp > DATEADD (day, -2, GETDATE()) 
+        ) AS a
       WHERE rank = 1  
       GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26
     
